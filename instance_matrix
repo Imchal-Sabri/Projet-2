@@ -1,8 +1,8 @@
 NOM;SUBNET;SERVICES;SECURITY_GROUP;PUBLIC_IP
-MACHINE-ADMIN;<##INFRA_NAME##>-subadm;NULL.sh;SG-ADMIN;true
+MACHINE-ADMIN-Sabri;<##INFRA_NAME##>-subadm;NULL.sh;SG-ADMIN;true
 
-MACHINE-RPROXY;<##INFRA_NAME##>-subadm;install_rproxy.sh;SG-RPROXY;true
+MACHINE-RPROXY-Sabri;<##INFRA_NAME##>-subadm;install_rproxy.sh;SG-RPROXY;true
 
-MACHINE-Sabri1;<##INFRA_NAME##>-priv1;install_web.sh;SG-WEB;false
-MACHINE-Sabri2;<##INFRA_NAME##>-priv2;install_web.sh;SG-WEB;false
-MACHINE-Sabri3;<##INFRA_NAME##>-priv3;install_web.sh;SG-WEB;false
+MACHINE-1;<##INFRA_NAME##>-priv1;install_web.sh;SG-WEB-Sabri;false
+MACHINE-Sabri2;<##INFRA_NAME##>-priv2;install_web.sh;SG-WEB-Sabri;false
+MACHINE-Sabri3;<##INFRA_NAME##>-priv3;install_web.sh;SG-WEB-Sabri;false
