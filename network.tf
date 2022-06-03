@@ -6,36 +6,25 @@ resource "aws_vpc" "<##INFRA_NAME##>-vpc" {
         }
 }
 
-#!/bin/bash
+resource "aws_subnet" "<##INFRA_NAME##>-subadm" {
+        vpc_id = "${aws_vpc.<##INFRA_NAME##>-vpc.id}"
+        cidr_block = "10.<##CLIENT_ID##>.1.0/24"
 
-I=0
+        tags = {
+                Name = "<##INFRA_NAME##>-subadm"
+        }
+}
 
-while read line
-do
-	if [ $I -gt 0 ]
-	then
-		if [ ! -z $line ]
-		then
-			INSTANCE_NAME=$(echo $line | cut -d";" -f1)
-			SUBNET_NAME=$(echo $line | cut -d";" -f2)
-			USER_DATA=$(echo $line | cut -d";" -f3)
-			SGROUP=$(echo $line | cut -d";" -f4)
-			PUBIP=$(echo $line | cut -d";" -f5)
+resource "aws_internet_gateway" "<##INFRA_NAME##>-igw" {
+        vpc_id = "${aws_vpc.<##INFRA_NAME##>-vpc.id}"
 
-			cp ../../TEMPLATES/instance_template new_instance
+        tags = {
+                Name = "<##INFRA_NAME##>-igw"
+        }
+}
 
-			sed -i "s|<##INSTANCE_NAME##>|${INSTANCE_NAME}|g" new_instance
-			sed -i "s|<##SUBNET_ID##>|${SUBNET_NAME}|g" new_instance
-			sed -i "s|<##USER_DATA##>|${USER_DATA}|g" new_instance
-			sed -i "s|<##SECURITY_GROUP##>|${SGROUP}|g" new_instance
-			sed -i "s|<##PUBLIC_IP##>|${PUBIP}|g" new_instance
-
-			mv new_instance ${INSTANCE_NAME}.tfpart
-		fi
-	else
-		I=1
-	fi
-done < instances_matrix
-
-cat *.tfpart > 03-instances.tf
-rm *.tfpart
+resource "aws_route" "<##INFRA_NAME##>-defroute" {
+        route_table_id = "${aws_vpc.<##INFRA_NAME##>-vpc.default_route_table_id}"
+        destination_cidr_block = "0.0.0.0/0"
+        gateway_id = "${aws_internet_gateway.<##INFRA_NAME##>-igw.id}"
+}
